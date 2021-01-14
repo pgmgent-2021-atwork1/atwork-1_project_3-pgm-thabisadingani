@@ -1159,4 +1159,55 @@ section.exhibition__section {
   }
 }
 
+ul.art__exhibitions--gallery {
+  display: flex;
+  overflow: auto;
+  align-items: center;
+}
+
+h2.margin--exhibition {
+  padding-top: 4rem;
+  padding-bottom: 3rem;
+  width: 20rem;
+  text-align: right;
+  font-size: 1.75rem;
+}
+
+.art__exhibitions--text h2 a {
+  font-size: 1.75rem;
+  color: #000;
+}
+
+.art__exhibitions--text h2 a:hover {
+  color: #003cff;
+  border-bottom: #003cff solid 2px;
+}
+
+div.artListExhibition {
+  margin-top: 3rem;
+}
+
+ul.art__exhibitions--gallery>li {
+  margin: 1rem;
+  font-size: 1.12rem;
+  color: #000;
+}
+
+h3.padding--top--bottom {
+  padding-top: 0.5rem;
+}
+
+li h3.colour--grey {
+  color: #787878;
+}
+
+li.art__exhibitions {
+  display: grid;
+  grid-template-columns: 20rem auto;
+  grid-template-rows: 1fr;
+  gap: 4rem;
+  margin-bottom: 3rem;
+  text-align: right;
+}
+
 @media(min-width: 47.8rem) {}
