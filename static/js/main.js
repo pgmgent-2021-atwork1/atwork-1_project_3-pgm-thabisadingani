@@ -1,7 +1,6 @@
 (() => {
 	const app = {
 		initialize() {
-      console.log('1. Application started');
       this.cacheElements();
       this.registerHTMLForListeners();
       this.fetchAtelier();
@@ -10,79 +9,110 @@
       this.buildUI(); 
 		},
 		cacheElements() {
-      console.log('2. cache all existing DOM elements');
       this.$artAndExhibitionsPosts = document.querySelector('ul.artAndExhibitions__posts');
       this.$atelierStudio__posts = document.querySelector('ul.atelierStudio__posts');
       this.$atelierPagePosts = document.querySelector('ul.atelier__page--posts');
       this.$related__list__items = document.querySelector('ul.related__list--items');
-      this.$getPostPressRelease  = document.querySelector('ul.getPostPressRelease ');
+      this.$getPostPressRelease  = document.querySelector('ul.getPostPressRelease');
       this.$getPostInThePress = document.querySelector('ul.getPostInThePress');
       this.$artAndExhibitionsPostsExtra = document.querySelector('ul.artAndExhibitions__posts--extra');
       this.$displayArts = document.querySelector('.displayArts');
       this.$categoryListItems = document.querySelectorAll('.category__list--items a ');
+      this.$backToTheTop = document.querySelector('.button--to__top');
+      this.$toggleActiveCategory = document.querySelectorAll('filter__categorie--items li')
       // this.$filterYearsItems = document.querySelectorAll('.filter__years--items > li > a')
 		},
 		buildUI() {
-      console.log('3. Build the user interface')
         
 		},
 		registerHTMLForListeners() { 
+    //   if(this.$toggleActiveCategory){
+    //   this.$toggleActiveCategory.addEventListener('click', () => {
+    //     this.toggleActiveMode();
+    //   });
+    // }
+      this.$backToTheTop.addEventListener('click', () => {
+        this.getBackToTheTop();
+      });
+      window.addEventListener('scroll', () => {
+        this.getPageScroll();
+      });
+
     },
     async fetchArt() {
+     
       const art = new ArtApi(); 
       const arts = await art.getArtData(); //this gets art data back from API for UI.
-      //  console.log(arts);
       this.updateArt(arts);
-      this.getArtistExhibition(arts);   
+      this.getArtistExhibition(arts);
+ 
     },
     async fetchPress() {
+      if(this.$getPostPressRelease){
       const press = new PressApi(); 
       const presses = await press.getPressData(); //this gets press data back from API for UI.
-      this.updatePress(presses)   
+      this.updatePress(presses) 
+    }  
     },
     async fetchAtelier() {
-      const aterlier = new AtelierApi(); 
-      const aterliers = await aterlier.getAtelierData(); //this get atelier data back from API for UI.
-      //  console.log(aterliers);
-      this.updateAterlier(aterliers);
-      this.updateAterlierPage(aterliers)   
+
+    
+        const aterlier = new AtelierApi(); 
+        const aterliers = await aterlier.getAtelierData(); //this get atelier data back from API for UI.
+        this.updateAterlier(aterliers);
+        this.updateAterlierPage(aterliers)   
+       
     },
     getArtistExhibition(data){
-      console.log(data)
        const filterYears = filterYearsItems.map((year) =>{
-        const filterArt  = data.filter((art)=>{
-          return art.year.indexOf(year) > -1;
+        const filterArts  = data.filter((art)=>{
+          return art.year.indexOf(year) > -1; 
         })
-          const artsList = this.buildUIForArt(filterArt);
-          return `
+       
+        const artsList = this.buildUIForArtsList(filterArts)
+         return`
             <div class="artListExhibition">
               <h2 class="margin--exhibition" id="${year}">${year}</h2>
               <ul>
-                ${artsList} 
+                 ${artsList}
               </ul>
             </div>
           `
        }).join('');
+       if(this.$displayArts){
        this.$displayArts.innerHTML = filterYears;
+      }
      },
-     buildUIForArt(filterArts){
-      const listItemsArts = filterArts.map((art) =>{
+    buildUIForArtsList(filterArts){
+      const search = window.location.search;
+      const params = new URLSearchParams(search);
+      const category = params.get('category');
+
+      let tempStr= '';
+      if(category) {
+
+
+        filterArts = filterArts.filter((art) => {
+          const  tags = art.tags.map(tag => tag.toLowerCase());
+           return tags.indexOf(category.toLowerCase()) > -1;
+        });
+      }
+      tempStr += filterArts.map( (art) => {
         return `
           <li class="art__exhibitions">
             <div class="art__exhibitions--text">
               <h2 class="post__title font_smaller"><a href = "in-dialogue-with-calatrava/index.html">${art.title}</a></h2>
               <h3 class="padding--top--bottom">${art.subtitle}</h3>
-              <h3 class="padding--top--bottom colour--grey">${art.tags} <span>-</span> ${art.location}</h3>
+              <h3 class="padding--top--bottom colour--grey">${art.tags ? art.tags  : ' '} <span>-</span> ${art.location ? art.location  : ' '}</h3>
             </div>
             <ul class="art__exhibitions--gallery">
                ${this.getArtistGallery(art.images)}
             </ul>
-          </li>
-        `
+          </li>`
       }).join('');
-      return listItemsArts;
-     },
-     getArtistGallery(images){
+      return tempStr;
+    },
+    getArtistGallery(images){
        let imagesArt = images.map((img) => {
         return `
         <li><a href = "in-dialogue-with-calatrava/index.html"><img src="../static/img/${img}" loading="lazy" alt=" art exhibition images "></a></li>
@@ -93,15 +123,13 @@
     updateArt(exhibitions) {
       const filterExhibitions = exhibitions.filter(exhibition => exhibition.highlight === true); 
       if(this.$artAndExhibitionsPosts){
-        this.$artAndExhibitionsPosts.innerHTML = this.buildAUIForPressAtelier(filterExhibitions);
-        
+        this.$artAndExhibitionsPosts.innerHTML = this.buildAUIForPressAtelier(filterExhibitions);  
       }
       if(this.$artAndExhibitionsPostsExtra){
        this.$artAndExhibitionsPostsExtra.innerHTML = this.buildAUIForPressAtelier(filterExhibitions);
       } 
     },
     updatePress(presses){
-      console.log(presses);
       const getFilterMapRelease = presses.filter(press => press.type === "release")
       const getFilterMapPress = presses.filter(press => press.type === "article");  
 
@@ -109,9 +137,10 @@
       this.$getPostInThePress.innerHTML = this.buildAUIForPressAtelier(getFilterMapPress);    
     },
     updateAterlierPage(aterliers){
-      const filterExhibitions = aterliers.filter(aterlier=> aterlier); 
-      if(this.$atelierPagePosts.innerHTML){
-        this.$atelierPagePosts.innerHTML = this.buildAUIForPressAtelier(filterExhibitions); 
+      // const filterExhibitions = aterliers.filter(aterlier => aterlier); 
+
+      if(this.$atelierPagePosts){
+        this.$atelierPagePosts.innerHTML = this.buildAUIForPressAtelier(aterliers); 
       }
     },
     updateAterlier(aterliers){
@@ -120,7 +149,7 @@
          <li class="${this.$atelierStudio__posts ? 'inner__post' : 'post__control--inner'}">
            <div>
              <a href="${this.$atelierStudio__posts ? 'atelier-studio/visiting-mons-again/index.html' : 'index.html'}">
-               <img src="${this.$atelierStudio__posts ? './' : '../../'}static/img/${aterlier.cover}"/>
+               <img src="${this.$atelierStudio__posts ? './' : '../../'}static/img/${aterlier.cover}" loading="lazy"/>
              </a>
              <h3 class="post__subTitle font_smaller">${aterlier.subtitle}</h3>	
              <h2 class="post__title font_smaller">${aterlier.title}</h2>
@@ -142,7 +171,7 @@
         <li class="${this.$atelierPagePosts ?'post__control--inner inner__post' : 'inner__post'}">
           <div>
             <a href="${this.$artAndExhibitionsPosts ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : this.$getPostPressRelease ? 'my-secret-garden-valencia/index.html': this.$artAndExhibitionsPostsExtra ? 'index.html' : 'visiting-mons-again/index.html'}">
-              <img src="${this.$artAndExhibitionsPosts ? './' : this.$artAndExhibitionsPostsExtra ? '../../': '../'}static/img/${press.cover}"/>
+              <img src="${this.$artAndExhibitionsPosts ? './' : this.$artAndExhibitionsPostsExtra ? '../../': '../'}static/img/${press.cover}" loading="lazy"/>
             </a>
             <h3 class="post__subTitle font_smaller">${press.subtitle}</h3>	
             <h2 class="post__title font_smaller">${press.title}</h2>
@@ -153,7 +182,22 @@
       }).join("");
       return mapExhibitions;
     },
-
+    toggleActiveMode(){
+        if(this.$nav__linksSide.classList.contains('active--now')){
+          this.$nav__linksSide.classList.remove('active--now');
+        }else{
+          this.$nav__linksSide.classList.add('active--now');} 
+     },
+    getPageScroll(){
+        if (window.pageYOffset > 400){ //show the back to top arrow
+          this.$backToTheTop.classList.add('btnAppears'); 
+        }else{ //hide it the bback to the top arrow
+          this.$backToTheTop.classList.remove('btnAppears'); 
+        }
+      },
+    getBackToTheTop(){
+        window.scrollTo(0, 0);
+    },
 	};
 	app.initialize();
 })();
