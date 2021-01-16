@@ -408,15 +408,22 @@ article.footer__bottom--inner form>button {
   text-align: center;
   font-size: 1rem;
   padding: 1rem;
+  border-left: none;
+  background-color: #fff;
+  color: #fff;
+  outline: none;
 }
 
 article.footer__bottom--inner form>button:hover {
   color: #003cff;
+
 }
 
 article.footer__bottom--inner form>input {
   width: 70%;
   padding-left: .5rem;
+  border-right: none;
+  outline: none;
 }
 
 @media(min-width: 47.8rem) {

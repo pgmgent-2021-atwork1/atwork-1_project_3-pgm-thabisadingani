@@ -83,12 +83,14 @@
         }
         //logic left me 
       }
-      for (const iterator of this.$filterYearsListItems){ 
-        if(iterator.classList.contains('active--now')){
-          iterator.classList.remove('active--now');
-        }else{
-          iterator.classList.add('active--now');} 
-      }
+    //   for (const iterator of this.$filterYearsListItems){ 
+    //     iterator.addEventListener('click', () => {
+    //     if(iterator.classList.contains('active--now')){
+    //       iterator.classList.remove('active--now');
+    //     }else{
+    //       iterator.classList.add('active--now');} 
+    //   })
+    // }
       let tempStr= '';
       if(category) {
         filterArts = filterArts.filter((art) => {
@@ -179,18 +181,12 @@
             <h3 class="post__subTitle font_smaller">${press.subtitle}</h3>	
             <h2 class="post__title font_smaller">${press.title}</h2>
             <p class="post__discription font_smaller">${press.description}</p>
-            <a class="post__link font_smaller" href="${this.$artAndExhibitionsPosts ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : this.$getPostPressRelease ? 'press/my-secret-garden-valencia/index.html' : this.$artAndExhibitionsPostsExtra ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : 'atelier-studio/visiting-mons-again/index.html'}">Learn more</a>
+            <a class="post__link font_smaller" href="${this.$artAndExhibitionsPosts ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : this.$getPostPressRelease ? 'press/my-secret-garden-valencia/index.html' : this.$artAndExhibitionsPostsExtra ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : 'atelier-studio/visiting-mons-again/index.html'}">${this.$getPostInThePress ?'Visit Website' : this.$getPostPressRelease ?'Learn more' :'Learn more'}</a>
           </div>
         </li> `;   
       }).join("");
       return mapExhibitions;
     },
-    toggleActiveMode(){
-        if(this.$filterYearsListItems.classList.contains('active--now')){
-          this.$filterYearsListItems.classList.remove('active--now');
-        }else{
-          this.$filterYearsListItems.classList.add('active--now');} 
-     },
     getPageScroll(){
         if (window.pageYOffset > 400){ //show the back to top arrow
           this.$backToTheTop.classList.add('btnAppears'); 
