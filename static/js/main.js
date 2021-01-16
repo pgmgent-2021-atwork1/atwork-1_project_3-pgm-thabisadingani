@@ -19,7 +19,7 @@
       this.$displayArts = document.querySelector('.displayArts');
       this.$categoryListItems = document.querySelectorAll('.category__list--items a ');
       this.$backToTheTop = document.querySelector('.button--to__top');
-      this.$toggleActiveCategory = document.querySelectorAll('filter__categorie--items li')
+      this.$toggleActiveCategory = document.querySelectorAll('ul.filter__categorie--items a')
       // this.$filterYearsItems = document.querySelectorAll('.filter__years--items > li > a')
 		},
 		buildUI() {
@@ -80,15 +80,20 @@
       const params = new URLSearchParams(search);
       const category = params.get('category');
 
+      for (const iterator of this.$toggleActiveCategory) {
+        if (iterator.getAttribute("data-att") === category){
+          iterator.classList.add("active--now");
+        }  
+      }
+      // document.queryselectorAll('[data-att="' + category + '"]').classlist.add('active--now');
       let tempStr= '';
       if(category) {
-
-
         filterArts = filterArts.filter((art) => {
           const  tags = art.tags.map(tag => tag.toLowerCase());
            return tags.indexOf(category.toLowerCase()) > -1;
         });
       }
+   
       tempStr += filterArts.map( (art) => {
         return `
           <li class="art__exhibitions">
@@ -124,9 +129,13 @@
     updatePress(presses){
       const getFilterMapRelease = presses.filter(press => press.type === "release")
       const getFilterMapPress = presses.filter(press => press.type === "article");  
-
+      
+      if(this.$getPostPressRelease){
       this.$getPostPressRelease.innerHTML = this.buildAUIForPressAtelier(getFilterMapRelease);
-      this.$getPostInThePress.innerHTML = this.buildAUIForPressAtelier(getFilterMapPress);    
+      }
+      if(this.$getPostInThePress){
+      this.$getPostInThePress.innerHTML = this.buildAUIForPressAtelier(getFilterMapPress);
+      }    
     },
     updateAterlierPage(aterliers){
       // const filterExhibitions = aterliers.filter(aterlier => aterlier); 
