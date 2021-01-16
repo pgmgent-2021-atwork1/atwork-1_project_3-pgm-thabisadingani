@@ -17,20 +17,14 @@
       this.$getPostInThePress = document.querySelector('ul.getPostInThePress');
       this.$artAndExhibitionsPostsExtra = document.querySelector('ul.artAndExhibitions__posts--extra');
       this.$displayArts = document.querySelector('.displayArts');
-      this.$categoryListItems = document.querySelectorAll('.category__list--items a ');
       this.$backToTheTop = document.querySelector('.button--to__top');
-      this.$toggleActiveCategory = document.querySelectorAll('ul.filter__categorie--items a')
-      // this.$filterYearsItems = document.querySelectorAll('.filter__years--items > li > a')
+      this.$toggleActiveCategory = document.querySelectorAll('ul.filter__categorie--items li');
+      this.$filterYearsListItems = document.querySelectorAll('ul.filter__years--items li')
 		},
 		buildUI() {
         
 		},
 		registerHTMLForListeners() { 
-    //   if(this.$toggleActiveCategory){
-    //   this.$toggleActiveCategory.addEventListener('click', () => {
-    //     this.toggleActiveMode();
-    //   });
-    // }
       this.$backToTheTop.addEventListener('click', () => {
         this.getBackToTheTop();
       });
@@ -81,11 +75,20 @@
       const category = params.get('category');
 
       for (const iterator of this.$toggleActiveCategory) {
-        if (iterator.getAttribute("data-att") === category){
+        if( iterator.dataset.att === category){
           iterator.classList.add("active--now");
-        }  
+        } 
+        else if(iterator.dataset.att === 'show all'){
+          iterator.classList.add("active--now");
+        }
+        //logic left me 
       }
-      // document.queryselectorAll('[data-att="' + category + '"]').classlist.add('active--now');
+      for (const iterator of this.$filterYearsListItems){ 
+        if(iterator.classList.contains('active--now')){
+          iterator.classList.remove('active--now');
+        }else{
+          iterator.classList.add('active--now');} 
+      }
       let tempStr= '';
       if(category) {
         filterArts = filterArts.filter((art) => {
@@ -93,7 +96,6 @@
            return tags.indexOf(category.toLowerCase()) > -1;
         });
       }
-   
       tempStr += filterArts.map( (art) => {
         return `
           <li class="art__exhibitions">
@@ -184,10 +186,10 @@
       return mapExhibitions;
     },
     toggleActiveMode(){
-        if(this.$nav__linksSide.classList.contains('active--now')){
-          this.$nav__linksSide.classList.remove('active--now');
+        if(this.$filterYearsListItems.classList.contains('active--now')){
+          this.$filterYearsListItems.classList.remove('active--now');
         }else{
-          this.$nav__linksSide.classList.add('active--now');} 
+          this.$filterYearsListItems.classList.add('active--now');} 
      },
     getPageScroll(){
         if (window.pageYOffset > 400){ //show the back to top arrow
