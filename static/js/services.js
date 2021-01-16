@@ -1,6 +1,6 @@
 //fetch atelier
 function AtelierApi () {
-  this.ATELIER_API = '../../data/atelier.json';
+  this.ATELIER_API = 'data/atelier.json';
   this.getAtelierData = async () => {
     try{
       const response = await fetch(this.ATELIER_API);
@@ -14,7 +14,7 @@ function AtelierApi () {
 
 //fetch press
 function PressApi (){
-  this.PRESS_API = '../../data/press.json';
+  this.PRESS_API = 'data/press.json';
   this.getPressData = async () => {
     try{
       const response = await fetch(this.PRESS_API);

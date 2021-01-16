@@ -37,31 +37,23 @@
       window.addEventListener('scroll', () => {
         this.getPageScroll();
       });
-
     },
     async fetchArt() {
-     
       const art = new ArtApi(); 
       const arts = await art.getArtData(); //this gets art data back from API for UI.
       this.updateArt(arts);
       this.getArtistExhibition(arts);
- 
     },
     async fetchPress() {
-      if(this.$getPostPressRelease){
       const press = new PressApi(); 
       const presses = await press.getPressData(); //this gets press data back from API for UI.
       this.updatePress(presses) 
-    }  
     },
-    async fetchAtelier() {
-
-    
+    async fetchAtelier() {    
         const aterlier = new AtelierApi(); 
         const aterliers = await aterlier.getAtelierData(); //this get atelier data back from API for UI.
         this.updateAterlier(aterliers);
-        this.updateAterlierPage(aterliers)   
-       
+        this.updateAterlierPage(aterliers)    
     },
     getArtistExhibition(data){
        const filterYears = filterYearsItems.map((year) =>{
@@ -101,7 +93,7 @@
         return `
           <li class="art__exhibitions">
             <div class="art__exhibitions--text">
-              <h2 class="post__title font_smaller"><a href = "in-dialogue-with-calatrava/index.html">${art.title}</a></h2>
+              <h2 class="post__title font_smaller"><a href = "art-and-exhibitions/in-dialogue-with-calatrava/index.html">${art.title}</a></h2>
               <h3 class="padding--top--bottom">${art.subtitle}</h3>
               <h3 class="padding--top--bottom colour--grey">${art.tags ? art.tags  : ' '} <span>-</span> ${art.location ? art.location  : ' '}</h3>
             </div>
@@ -115,7 +107,7 @@
     getArtistGallery(images){
        let imagesArt = images.map((img) => {
         return `
-        <li><a href = "in-dialogue-with-calatrava/index.html"><img src="../static/img/${img}" loading="lazy" alt=" art exhibition images "></a></li>
+        <li><a href = "art-and-exhibitions/in-dialogue-with-calatrava/index.html"><img src="static/img/${img}" loading="lazy" alt=" art exhibition images "></a></li>
       `
        }).join('');
       return imagesArt
@@ -148,13 +140,13 @@
          return `
          <li class="${this.$atelierStudio__posts ? 'inner__post' : 'post__control--inner'}">
            <div>
-             <a href="${this.$atelierStudio__posts ? 'atelier-studio/visiting-mons-again/index.html' : 'index.html'}">
-               <img src="${this.$atelierStudio__posts ? './' : '../../'}static/img/${aterlier.cover}" loading="lazy"/>
+             <a href="atelier-studio/visiting-mons-again/index.html">
+               <img src="static/img/${aterlier.cover}" loading="lazy"/>
              </a>
              <h3 class="post__subTitle font_smaller">${aterlier.subtitle}</h3>	
              <h2 class="post__title font_smaller">${aterlier.title}</h2>
              <p class="post__discription font_smaller">${aterlier.description}</p>
-             <a class="post__link font_smaller" href="${this.$atelierStudio__posts ? 'atelier-studio/visiting-mons-again/index.html' :'index.html'}">Learn more</a>
+             <a class="post__link font_smaller" href="atelier-studio/visiting-mons-again/index.html">Learn more</a>
              </div>
          </li> `;  
      }).join("");
@@ -170,13 +162,13 @@
         return `
         <li class="${this.$atelierPagePosts ?'post__control--inner inner__post' : 'inner__post'}">
           <div>
-            <a href="${this.$artAndExhibitionsPosts ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : this.$getPostPressRelease ? 'my-secret-garden-valencia/index.html': this.$artAndExhibitionsPostsExtra ? 'index.html' : 'visiting-mons-again/index.html'}">
-              <img src="${this.$artAndExhibitionsPosts ? './' : this.$artAndExhibitionsPostsExtra ? '../../': '../'}static/img/${press.cover}" loading="lazy"/>
+            <a href="${this.$artAndExhibitionsPosts ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : this.$getPostPressRelease ? 'press/my-secret-garden-valencia/index.html': this.$artAndExhibitionsPostsExtra ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : 'atelier-studio/visiting-mons-again/index.html'}">
+              <img src="static/img/${press.cover}" loading="lazy"/>
             </a>
             <h3 class="post__subTitle font_smaller">${press.subtitle}</h3>	
             <h2 class="post__title font_smaller">${press.title}</h2>
             <p class="post__discription font_smaller">${press.description}</p>
-            <a class="post__link font_smaller" href="${this.$artAndExhibitionsPosts ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : this.$getPostPressRelease ? 'my-secret-garden-valencia/index.html' : this.$artAndExhibitionsPostsExtra ? 'index.html' : 'visiting-mons-again/index.html'}">Learn more</a>
+            <a class="post__link font_smaller" href="${this.$artAndExhibitionsPosts ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : this.$getPostPressRelease ? 'press/my-secret-garden-valencia/index.html' : this.$artAndExhibitionsPostsExtra ? 'art-and-exhibitions/in-dialogue-with-calatrava/index.html' : 'atelier-studio/visiting-mons-again/index.html'}">Learn more</a>
           </div>
         </li> `;   
       }).join("");
